@@ -110,23 +110,16 @@ void desenhaPersonagem() {
     Texture2D texturaAtual = personagem.dados.ataque ? personagem.imagem[2] : (personagem.olhandoDireita ? personagem.imagem[0] : personagem.imagem[1]);
     if (texturaAtual.width > 0 && texturaAtual.height > 0) {
         Rectangle src = { 0.0f, 0.0f, (float)texturaAtual.width, (float)texturaAtual.height };
-        Rectangle dst = { personagem.posicao.x, personagem.posicao.y, (float)personagem.largura, (float)personagem.altura };
+        float escalaAtaque = personagem.dados.ataque ? 3.2f : 1.0f;
+        float drawW = (float)personagem.largura * escalaAtaque;
+        float drawH = (float)personagem.altura * escalaAtaque;
+        float drawX = personagem.posicao.x + ((float)personagem.largura - drawW) * 0.5f;
+        float ajusteAtaqueY = personagem.dados.ataque ? 8.0f : 0.0f;
+        float drawY = personagem.posicao.y + ((float)personagem.altura - drawH) + ajusteAtaqueY;
+        Rectangle dst = { drawX, drawY, drawW, drawH };
         DrawTexturePro(texturaAtual, src, dst, { 0, 0 }, 0.0f, WHITE);
     } else {
         Color corAtual = personagem.dados.ataque ? PINK : GREEN;
         DrawRectangle((int)personagem.posicao.x, (int)personagem.posicao.y, personagem.largura, personagem.altura, corAtual);
-    }
-
-    if (personagem.dados.ataque) {
-        int espadaLargura = personagem.largura;
-        int espadaAltura = personagem.altura / 4;
-        if (espadaAltura < 3) espadaAltura = 3;
-
-        int espadaY = (int)personagem.posicao.y + (personagem.altura / 2) - (espadaAltura / 2);
-        int espadaX = personagem.olhandoDireita
-            ? (int)personagem.posicao.x + personagem.largura
-            : (int)personagem.posicao.x - espadaLargura;
-
-        DrawRectangle(espadaX, espadaY, espadaLargura, espadaAltura, YELLOW);
     }
 }
